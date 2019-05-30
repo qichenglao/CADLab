@@ -208,7 +208,7 @@ def main():
         acc_all = evaluate(val_loaders, model)
         accs[epoch+1] = acc_all[0][config.TEST.CRITERION]
         for key in sorted(accs.keys()):
-            print 'iter %d: %.4f' % (key, accs[key])
+            print('iter %d: %.4f' % (key, accs[key]))
 
         # remember best acc and save checkpoint
         is_best = accs[epoch+1] > best_acc1

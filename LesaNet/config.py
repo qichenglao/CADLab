@@ -79,7 +79,7 @@ def merge_a_into_b(a, b):
     if type(a) is not edict:
         return
 
-    for k, v in a.iteritems():
+    for k, v in a.items():
         # recursively merge dicts
         if type(v) is edict:
             merge_a_into_b(a[k], b[k])

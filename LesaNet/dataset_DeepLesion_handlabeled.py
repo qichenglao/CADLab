@@ -9,7 +9,7 @@
 
 import torch.utils.data as data
 import csv
-import cPickle
+import pickle
 import cv2
 import matplotlib.pyplot as plt
 import os
@@ -45,31 +45,31 @@ class DeepLesion_handlabeled(data.Dataset):
         self.labels = [unique(l) for l in self.labels]
         self.uncertain_labels = [unique(l) for l in self.uncertain_labels]
 
-        print '>>>', len(self.smp_idxs), 'hand-labeled samples,',
+        print('>>>', len(self.smp_idxs), 'hand-labeled samples,',)
         keep = [i for i in range(len(self.smp_idxs)) if (not self.noisy[self.smp_idxs[i]])
                 and len(self.labels[i]) > 0]
         self.smp_idxs = [self.smp_idxs[i] for i in keep]
         self.labels = [self.labels[i] for i in keep]
         self.uncertain_labels = [self.uncertain_labels[i] for i in keep]
-        print 'num of positive labels:', np.hstack(self.labels).shape[0]
-        print 'num of uncertain labels:', np.hstack(self.uncertain_labels).shape[0]
+        print('num of positive labels:', np.hstack(self.labels).shape[0])
+        print('num of uncertain labels:', np.hstack(self.uncertain_labels).shape[0])
 
         if default.generate_features_all:
             self.smp_idxs = range(len(self.filenames))
             self.labels = [[0] for _ in self.smp_idxs]
             self.uncertain_labels = [[0] for _ in self.smp_idxs]
-            print 'Fake evaluation, generating features for all 32735 lesions'
+            print('Fake evaluation, generating features for all 32735 lesions')
 
         self.num_smp = len(self.smp_idxs)
-        print self.num_smp, 'after removing noisy and empty ones:',
+        print(self.num_smp, 'after removing noisy and empty ones:',)
 
         all_labels = [lb for lbs in self.labels for lb in lbs]
-        print self.num_cls, 'classes'
+        print(self.num_cls, 'classes')
         self.cls_sz = np.array([all_labels.count(cls) for cls in range(self.num_cls)], dtype=np.float32)
         if self.num_cls < 10:
-            print 'number of positive samples:'
+            print('number of positive samples:')
             for cls in range(self.num_cls):
-                print self.term_list[cls], int(self.cls_sz[cls])
+                print(self.term_list[cls], int(self.cls_sz[cls]))
 
     def __getitem__(self, index):
         """

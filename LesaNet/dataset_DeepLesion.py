@@ -8,7 +8,7 @@
 # --------------------------------------------------------
 
 import torch.utils.data as data
-import cPickle
+import pickle
 import cv2
 import matplotlib.pyplot as plt
 import os
@@ -34,7 +34,7 @@ class DeepLesion(data.Dataset):
         fn = default.split_file
         with open(fn, 'r') as f:
             data = json.load(f)
-            print 'loaded', fn
+            print('loaded', fn)
         self.term_list = data['term_list']
         self.num_labels = len(self.term_list)
 
@@ -63,25 +63,25 @@ class DeepLesion(data.Dataset):
         terms_all = [d['term'] for d in self.ontology]
         self.term_class = [self.ontology[terms_all.index(t)]['class'] for t in self.term_list]
 
-        print '>>>', len(self.smp_idxs), prefix, 'samples,',
+        print('>>>', len(self.smp_idxs), prefix, 'samples,',)
         keep = [i for i in range(len(self.smp_idxs))
                 if (not self.noisy[self.smp_idxs[i]])
                    and len(self.labels[i]) > 0]
         self.smp_idxs = [self.smp_idxs[i] for i in keep]
         self.num_smp = len(self.smp_idxs)
-        print self.num_smp, 'after removing noisy and empty ones:'
+        print(self.num_smp, 'after removing noisy and empty ones:')
 
-        print self.num_labels, 'labels,',
+        print(self.num_labels, 'labels,',)
         self.labels = [self.labels[i] for i in keep]
         self.uncertain_labels = [self.uncertain_labels[i] for i in keep]
-        print '%d relevant cases,' % np.hstack(self.labels).shape[0],
-        print '%d uncertain cases.' % np.hstack(self.uncertain_labels).shape[0]
+        print('%d relevant cases,' % np.hstack(self.labels).shape[0],)
+        print('%d uncertain cases.' % np.hstack(self.uncertain_labels).shape[0])
 
         if default.generate_features_all:
             self.smp_idxs = range(len(self.filenames))
             self.labels = [[0] for _ in self.smp_idxs]
             self.uncertain_labels = [[0] for _ in self.smp_idxs]
-            print 'Fake evaluation, generating features for all 32735 lesions'
+            print('Fake evaluation, generating features for all 32735 lesions')
 
         all_labels = [lb for lbs in self.labels for lb in lbs]
         self.cls_sz = np.array([all_labels.count(cls) for cls in range(self.num_labels)], dtype=np.float32)
@@ -155,7 +155,7 @@ class DeepLesion(data.Dataset):
         for t in self.term_list:
             ps = parents_map[t]
             self.parent_list.append([self.term_list.index(p) for p in ps if p in self.term_list])
-        print '%d parent-child pairs extracted' % len([p1 for p in self.parent_list for p1 in p])
+        print('%d parent-child pairs extracted' % len([p1 for p in self.parent_list for p1 in p]))
         default.parent_list = self.parent_list
 
     def gen_children_list(self):
@@ -197,7 +197,7 @@ class DeepLesion(data.Dataset):
             if not flag:
                 break
 
-        print '%d mutually exclusive pairs extracted' % (len([p1 for p in self.exclusive_list for p1 in p]) / 2)
+        print('%d mutually exclusive pairs extracted' % (len([p1 for p in self.exclusive_list for p1 in p]) / 2))
         default.exclusive_list = self.exclusive_list
 
     def gen_class_weights(self):

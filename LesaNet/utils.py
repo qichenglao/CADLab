@@ -140,10 +140,10 @@ def print_accs(accs):
 
     print
     for key in items:
-        print key, '\t',
+        print(key, '\t',)
     print
     for key in items:
-        print '%.4f' % res[key], '\t',
+        print('%.4f' % res[key], '\t',)
     print
 
     for crit in ['auc_perclass', 'perclass_f1s', 'perclass_precisions', 'perclass_recalls']:
@@ -160,7 +160,7 @@ def print_accs(accs):
             mask = (ranges[idx][0] <= default.cls_sz_train) & (default.cls_sz_train <= ranges[idx][1])
             acc1 = accs[crit][mask]
             msg += '%s (%d): %.4f;\t' % (names[idx], np.count_nonzero(~np.isnan(acc1)), np.nanmean(acc1))
-        print msg
+        print(msg)
     print
 
 

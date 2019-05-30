@@ -61,7 +61,7 @@ def load_multislice_img_16bit_png(imname, slice_idx, slice_intv, do_clip, num_sl
         if imname1 not in data_cache.keys():
             data_cache[imname1] = cv2.imread(fullpath(imname1), -1)
             if data_cache[imname1] is None:
-                print 'file reading error:', imname1
+                print('file reading error:', imname1)
         return data_cache[imname1]
 
     im_cur = _load_data(imname)
@@ -225,7 +225,7 @@ def im_list_to_blob(ims, use_max_size=False):
     blob = np.zeros((num_images, num_channel, max_shape[0], max_shape[1]),
                     dtype=np.float32)
     rois = np.zeros((num_images, 4))
-    for i in xrange(num_images):
+    for i in range(num_images):
         im = ims[i]
 
         # # put images in the center
